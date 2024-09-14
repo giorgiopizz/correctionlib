@@ -1,6 +1,5 @@
-"""Tools to convert other formats to correctionlib
+"""Tools to convert other formats to correctionlib"""
 
-"""
 from numbers import Real
 from typing import (
     TYPE_CHECKING,
@@ -101,9 +100,16 @@ def from_histogram(
                     "cannot auto-convert string or integer category axes (yet)"
                 )
             b = cast(Tuple[float, float], b)
-            out.append(b[0])
+            new_b = [j for j in b]
+            for j in range(2):
+                if new_b[j] == numpy.inf or new_b[j] == float("+inf"):
+                    new_b[j] = "+inf"
+                elif new_b[j] == -numpy.inf or new_b[j] == float("-inf"):
+                    new_b[j] = "-inf"
+
+            out.append(new_b[0])
             if i == len(axis) - 1:
-                out.append(b[1])
+                out.append(new_b[1])
         return out
 
     def flatten_to(values: "ndarray[Any, Any]", depth: int) -> Iterable[Any]:
